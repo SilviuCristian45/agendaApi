@@ -33,4 +33,13 @@ export class ContactController {
             } )
         })
     }
+
+    public getContact(id: number): Promise<Contact> {
+        return new Promise( (resolve, reject) => {
+            this.db.get('SELECT * FROM contacts WHERE id=?',[id], (err, row) => {
+                if (err) reject(err)
+                resolve(row as Contact)
+            })
+        })
+    }
 }
