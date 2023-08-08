@@ -10,7 +10,7 @@ const contactController = new ContactController()
 const jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/contacts', (req: Request, res: Response) => {
   contactController.getContacts().then(  contacts => res.json(contacts) ).catch(err => { 
     console.log(err)
     res.status(501)
@@ -20,6 +20,14 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/addContact', jsonParser, (req: Request, res: Response) => {
   const newContact = req.body as Contact
   contactController.addContact(newContact).then( newContact => res.json(newContact) ).catch( err => {
+    console.log(err)
+    res.status(501)
+  })
+})
+
+app.get('/contacts/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10)
+  contactController.getContact(id).then(contact => res.json(contact)).catch( err => {
     console.log(err)
     res.status(501)
   })
