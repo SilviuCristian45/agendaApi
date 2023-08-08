@@ -3,34 +3,31 @@ import express from 'express'
 import { ContactController } from './ContactController'
 import { Contact } from './Contact'
 import bodyParser, { BodyParser } from 'body-parser'
+import {errorMiddleware} from './middlewares/errormiddleware'
+import RoutesConstants from './Utils'
 
 const app: Express = express()
 const contactController = new ContactController()
 
 const jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.use(errorMiddleware)
 
-app.get('/contacts', (req: Request, res: Response) => {
-  contactController.getContacts().then(  contacts => res.json(contacts) ).catch(err => { 
-    console.log(err)
-    res.status(501)
-  })
+app.get(RoutesConstants.getContacts, async (req: Request, res: Response) => {
+  const contacts = await contactController.getContacts()
+  res.json(contacts)
 })
 
-app.post('/addContact', jsonParser, (req: Request, res: Response) => {
-  const newContact = req.body as Contact
-  contactController.addContact(newContact).then( newContact => res.json(newContact) ).catch( err => {
-    console.log(err)
-    res.status(501)
-  })
+app.post(RoutesConstants.addContact, jsonParser, async (req: Request, res: Response) => {
+  const newContactBody = req.body as Contact
+  const newContact = await contactController.addContact(newContactBody)
+  res.json(newContact)
 })
 
-app.get('/contacts/:id', (req: Request, res: Response) => {
+app.get(RoutesConstants.getContactById, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10)
-  contactController.getContact(id).then(contact => res.json(contact)).catch( err => {
-    console.log(err)
-    res.status(501)
-  })
+  const contact = await contactController.getContact(id)
+  res.json(contact)
 })
 
 app.listen(5000, () => {
