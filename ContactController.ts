@@ -18,7 +18,7 @@ export class ContactController {
     
     public getContacts(): Promise<Array<Contact>> {
         return new Promise( (resolve, reject) => {
-            this.db.all("SELECT Name, Phone, Description FROM contacts", (error, rows: Array<Contact>) => {
+            this.db.all("SELECT id, Name, Phone, Description FROM contacts", (error, rows: Array<Contact>) => {
                 if (error) reject(error)
                 resolve(rows)
             })
@@ -27,7 +27,8 @@ export class ContactController {
 
     public addContact(newContact: Contact): Promise<Contact> {
         return new Promise( (resolve, reject) => {
-            this.db.run('INSERT INTO contacts(Name, Phone, Description) VALUES (?,?,?)', [newContact.name, newContact.phone, newContact.description], err => {
+		console.log(newContact.Name)
+            this.db.run('INSERT INTO contacts(Name, Phone, Description) VALUES (?,?,?)', [newContact.Name, newContact.Phone, newContact.Description], err => {
                 if(err) reject(err);
                 resolve(newContact);
             } )
