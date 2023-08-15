@@ -5,6 +5,7 @@ import { Contact } from './Contact'
 import bodyParser, { BodyParser } from 'body-parser'
 import {errorMiddleware} from './middlewares/errormiddleware'
 import RoutesConstants from './Utils'
+import cors from 'cors';
 
 const app: Express = express()
 const contactController = new ContactController()
@@ -12,6 +13,7 @@ const contactController = new ContactController()
 const jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(errorMiddleware)
+app.use(cors())
 
 app.get(RoutesConstants.getContacts, async (req: Request, res: Response) => {
   const contacts = await contactController.getContacts()
@@ -20,6 +22,7 @@ app.get(RoutesConstants.getContacts, async (req: Request, res: Response) => {
 
 app.post(RoutesConstants.addContact, jsonParser, async (req: Request, res: Response) => {
   const newContactBody = req.body as Contact
+  console.log(req.body)
   const newContact = await contactController.addContact(newContactBody)
   res.json(newContact)
 })
