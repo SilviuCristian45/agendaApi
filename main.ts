@@ -14,6 +14,7 @@ const jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(cors())
 app.use(errorMiddleware)
+app.use(cors())
 
 app.get(RoutesConstants.getContacts, async (req: Request, res: Response) => {
   const contacts = await contactController.getContacts()
