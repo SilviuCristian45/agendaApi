@@ -5,10 +5,12 @@ import { Contact } from './Contact'
 import bodyParser, { BodyParser } from 'body-parser'
 import {errorMiddleware} from './middlewares/errormiddleware'
 import RoutesConstants from './Utils'
+import {FirebaseImageStorage} from './firebase'
 import cors from 'cors'
 
 const app: Express = express()
 const contactController = new ContactController()
+const firebaseImageStorageService = new FirebaseImageStorage()
 
 const jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
