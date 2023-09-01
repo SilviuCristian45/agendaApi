@@ -15,4 +15,5 @@ model Contact {
   Name String 
   Phone String
   Description String
+  Image String @default("default")
 }
